@@ -22,11 +22,11 @@ class UserProfile(AbstractUser):
     gender = models.CharField(max_length=50, verbose_name='gender', choices=GENDER_CHOICES)
     address = models.CharField(max_length=100, verbose_name='地址', default='')
     mobile = models.CharField(max_length=11, verbose_name='手机号码')
-    icon = models.ImageField(verbose_name='用户头像', upload_to='icon/%Y/%m/%d/', default='default.jpg')
+    icon = models.ImageField(verbose_name='用户头像', upload_to='users/icon/%Y/%m/%d/', default='default.jpg')
 
     class Meta:
         verbose_name = '用户信息'
-        verbose_name_plural = verbose_name+'555'
+        verbose_name_plural = verbose_name
 
     # def unread_numbers(self):
     #     """

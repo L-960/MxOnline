@@ -21,7 +21,7 @@ class Course(BaseModel):
     teacher_tell = models.CharField(max_length=300, verbose_name="老师告诉你", default="")
     is_classics = models.BooleanField(default=False, verbose_name="是否经典")
     is_banner = models.BooleanField(default=False, verbose_name="是否广告位")
-    image = models.ImageField(upload_to="courses/img/%Y/%m", verbose_name="课程封面图", max_length=100)
+    image = models.ImageField(upload_to="courses/Course/img/%Y/%m", verbose_name="课程封面图", max_length=100)
 
     class Meta:
         verbose_name = "课程信息"
@@ -52,7 +52,7 @@ class Video(BaseModel):
     url = models.CharField(max_length=1000, verbose_name="访问地址")
 
     class Meta:
-        verbose_name = "视频"
+        verbose_name = "课程视频"
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -62,7 +62,7 @@ class Video(BaseModel):
 class CourseResource(BaseModel):
     course = models.ForeignKey(Course, verbose_name="课程", on_delete=models.CASCADE)
     name = models.CharField(max_length=100, verbose_name="名称")
-    file = models.FileField(max_length=200, verbose_name="下载地址", upload_to="courses/resource/%Y/%m")
+    file = models.FileField(max_length=200, verbose_name="下载地址", upload_to="courses/CourseResource/resource/%Y/%m")
 
     class Meta:
         verbose_name = "课程资源"
