@@ -24,7 +24,7 @@ SECRET_KEY = 'kps&ke_wx-zy&e4bm(yxu$xu1=(q4j()=!zybn%pr7pfghoqre'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -125,7 +125,9 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-STATICFILES = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/upload')
 
