@@ -1,2 +1,2 @@
 # MxOnline
-在线学习网站
+Django实现慕学在线
