@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'd509-jwo9xxz0=j3o!zb&bq=9@&&=t4oc^d+zdjn!lblmaa$ec'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -41,8 +39,8 @@ INSTALLED_APPS = [
     'apps.courses.apps.CoursesConfig',
     'crispy_forms',
     'xadmin.apps.XAdminConfig',
-    'apps.organizations.apps.OrganizationsConfig'
-
+    'apps.organizations.apps.OrganizationsConfig',
+    'pure_pagination',
 
 ]
 
@@ -78,21 +76,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MxOnline.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mxonline', # 数据库名字
-        'USER':'root',
-        'PASSWORD':'root',
-        'HOST':'localhost',
-        'PORT':3306,
+        'NAME': 'mxonline',  # 数据库名字
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': 3306,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -112,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -126,7 +121,6 @@ USE_I18N = True
 
 USE_L10N = True
 
-
 # user表在django中已经注册了， appname = user
 AUTH_USER_MODEL = "users.UserProfile"
 # Static files (CSS, JavaScript, Images)
@@ -139,3 +133,13 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#  分页相关的设置
+PAGINATION_SETTINGS = {
+    #  主分页部分显示几个
+    'PAGE_RANGE_DISPLAYED': 3,
+    #  省略号前面或者后面显示几个
+    'MARGIN_PAGES_DISPLAYED': 1,
+    #  是否显示第一页
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}
