@@ -137,9 +137,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #  分页相关的设置
 PAGINATION_SETTINGS = {
     #  主分页部分显示几个
-    'PAGE_RANGE_DISPLAYED': 3,
+    'PAGE_RANGE_DISPLAYED': 5,
     #  省略号前面或者后面显示几个
-    'MARGIN_PAGES_DISPLAYED': 1,
+    'MARGIN_PAGES_DISPLAYED': 3,
     #  是否显示第一页
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,
 }

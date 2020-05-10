@@ -60,7 +60,7 @@ class Video(BaseModel):
 class CourseResource(BaseModel):
     course = models.ForeignKey(Course, verbose_name="课程", on_delete=models.CASCADE)
     name = models.CharField(max_length=100, verbose_name="名称")
-    file = models.FileField(max_length=200, verbose_name="下载地址", upload_to="courses/resourse%Y/%m")
+    file = models.FileField(max_length=200, verbose_name="下载地址", upload_to="courses/resourse/%Y/%m")
 
     class Meta:
         verbose_name = "课程资源"
