@@ -55,4 +55,5 @@ class OrgView(View):
             'category': category,
             'ct': ct,
             'city_id': city,
+            'title': '授课机构',
         })
