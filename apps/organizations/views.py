@@ -36,6 +36,13 @@ class OrgView(View):
             if city_id.isdigit():
                 all_orgs = all_orgs.filter(city_id=int(city_id))
 
+        #  在接口中获取排序规则
+        sort = request.GET.get('sort', '')
+        if sort:
+            if sort == 'students':
+                all_orgs = all_orgs.order_by('-students')
+            elif sort == 'courses':
+                all_orgs = all_orgs.order_by('-course_nums')
         #  获取查询后的机构总数
         org_nums = all_orgs.count()
 
@@ -56,7 +63,5 @@ class OrgView(View):
             'ct': ct,
             'city_id': city,
             'title': '授课机构',
+            'sort': sort,
         })
-
-
-
