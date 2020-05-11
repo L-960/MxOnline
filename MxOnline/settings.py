@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'xadmin.apps.XAdminConfig',
     'apps.organizations.apps.OrganizationsConfig',
+    'apps.operations.apps.OperationsConfig',
     'pure_pagination',
 
 ]

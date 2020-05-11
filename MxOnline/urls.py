@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 import xadmin
 from django.views.generic import TemplateView
 
@@ -34,9 +34,11 @@ urlpatterns = [
     # path('', views.index),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('login/', LoginView.as_view(), name='login'),
-    # 配置授课机构列表展示
-    path('orglist/', OrgView.as_view(), name='org_list'),
+
     # 配置公开课的url
     path('courselist/', CourseView.as_view(), name='course_list'),
-    url(r'^coursetest/', views.coursetest, name='coursetest')
+    url(r'^coursetest/', views.coursetest, name='coursetest'),
+
+    # 配置授课机构子路由
+    url(r'^org/', include(('apps.organizations.urls', 'organizations'), namespace='org')),
 ]
