@@ -143,6 +143,7 @@
             <div class="right companyright">
                 <div class="head">我要学习</div>
                 <form class="rightform" id="jsStayForm">
+                    {% csrf_token %}
                     <div>
                         <img src="../images/rightform1.png"/>
                         <input type="text" name="name" id="companyName" placeholder="名字" maxlength="25"/>
@@ -176,4 +177,33 @@
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block custom_js %}
+    <script>
+        $(function () {
+            $(document).ready(function () {
+                $('#jsStayBtn').click(function () {
+                    $.ajax({
+                        url: "{% url 'org:add_ask' %}",
+                        cache: false,
+                        type: 'POST',
+                        async: true,
+                        {#async:true,是否异步#}
+                        data: $("#jsStayForm").serialize(),
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                $('#jsStayForm')[0].reset();
+                                $('#jsCompanyTips').html(data.msg);
+                            } else if (data.status == 'error') {
+                                {#$('#jsStayForm')[0].reset();#}
+                                $('#jsCompanyTips').html(data.msg);
+                            }
+                        }
+
+                    })
+                })
+            })
+        })
+    </script>
 {% endblock %}

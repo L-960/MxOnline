@@ -1,5 +1,8 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import View
+
+from apps.organizations.forms import AddAskForm
 from apps.organizations.models import CourseOrg, City, Teacher
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -74,5 +77,18 @@ class AddAsk(View):
     '''
     处理用户咨询模块
     '''
+
     def post(self, request, *args, **kwargs):
-        pass
+        user_ask_form = AddAskForm(request.POST)
+        # 如果表单合法
+        if user_ask_form.is_valid():
+            user_ask_form.save(commit=True)
+            return JsonResponse({
+                'status': 'success',
+                'msg': '提交成功',
+            })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'msg': '提交错误',
+            })
