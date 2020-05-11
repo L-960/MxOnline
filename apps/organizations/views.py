@@ -16,6 +16,7 @@ class OrgView(View):
         """
         all_orgs = CourseOrg.objects.all()
         all_citys = City.objects.all()
+        hot_orgs = all_orgs.order_by("-click_nums")[:3]
 
         #  获取类别，然后根据类别查询机构
         category = request.GET.get("ct", "")
@@ -43,6 +44,7 @@ class OrgView(View):
                 all_orgs = all_orgs.order_by('-students')
             elif sort == 'courses':
                 all_orgs = all_orgs.order_by('-course_nums')
+
         #  获取查询后的机构总数
         org_nums = all_orgs.count()
 
@@ -51,7 +53,7 @@ class OrgView(View):
         except PageNotAnInteger:
             page = 1
 
-        p = Paginator(all_orgs, per_page=10, request=request)  # 每页显示10个
+        p = Paginator(all_orgs, per_page=5, request=request)  # 每页显示5个
 
         orgs = p.page(page)
 
@@ -64,4 +66,5 @@ class OrgView(View):
             'city_id': city,
             'title': '授课机构',
             'sort': sort,
+            'hot_orgs': hot_orgs,
         })
