@@ -35,9 +35,9 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('login/', LoginView.as_view(), name='login'),
 
-    # 配置公开课的url
-    path('courselist/', CourseView.as_view(), name='course_list'),
-    url(r'^coursetest/', views.coursetest, name='coursetest'),
+    # 配置公开课的子url
+    url(r'^courses/', include(('apps.courses.urls', 'courses'), namespace='courses')),
+    # url(r'^coursetest/', views.coursetest, name='coursetest'),
 
     # 配置授课机构子路由
     url(r'^org/', include(('apps.organizations.urls', 'organizations'), namespace='org')),
