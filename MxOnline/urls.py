@@ -19,7 +19,7 @@ import xadmin
 from django.views.generic import TemplateView
 
 from apps.courses import views
-from apps.courses.views import CourseView
+from apps.courses.views import *
 from apps.organizations.views import OrgView
 from apps.users.views import LoginView
 from django.conf.urls import url

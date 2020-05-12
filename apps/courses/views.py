@@ -10,7 +10,7 @@ from apps.courses.models import *
 from django.views.generic.base import View
 
 
-class CourseView(View):
+class CourseListView(View):
     def get(self, request, *args, **kwargs):
         # 先获得所有课程信息,order_by默认升序，改成降序
         all_courses = Course.objects.all().order_by('id').order_by('-add_time')
@@ -40,6 +40,24 @@ class CourseView(View):
             'title': '公开课',
             'sort': sort,
             'hot_courses': hot_courses,
+        })
+
+
+class CourseDetailView(View):
+    def get(self, request, course_id):
+        '''
+        获取课程详情页
+        :param request:
+        :return:
+        '''
+        # 根据id查询课程详情
+        course = Course.objects.get(pk=int(course_id))
+        # 当前course点击次数+1
+        course.click_nums +=1
+        course.save()
+
+        return render(request, 'course-detail.html', context={
+            'course': course,
         })
 
 

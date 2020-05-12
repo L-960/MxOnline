@@ -31,6 +31,10 @@ class Course(BaseModel):
     def __str__(self):
         return self.name
 
+    # 统计章节数
+    def lesson_nums(self):
+        return self.lesson_set.all().count()
+
 
 class Lesson(BaseModel):
     # on_delete表示对应的外键数据 把被删除后， 当前数据怎么办
