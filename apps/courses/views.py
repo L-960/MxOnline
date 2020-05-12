@@ -14,6 +14,8 @@ class CourseView(View):
     def get(self, request, *args, **kwargs):
         # 先获得所有课程信息,order_by默认升序，改成降序
         all_courses = Course.objects.all().order_by('id').order_by('-add_time')
+        # 获取热门课程，前三个
+        hot_courses = Course.objects.order_by('-click_nums')[:3]
         # 获取sort,默认为空
         sort = request.GET.get('sort', '')
         # 如果sort存在，按照条件排序
@@ -37,6 +39,7 @@ class CourseView(View):
             'courses': courses,
             'title': '公开课',
             'sort': sort,
+            'hot_courses': hot_courses,
         })
 
 
