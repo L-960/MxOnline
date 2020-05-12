@@ -8,6 +8,7 @@ from pure_pagination import Paginator
 from apps.courses.models import *
 # Create your views here.
 from django.views.generic.base import View
+from apps.operations.models import *
 
 
 class CourseListView(View):
@@ -53,11 +54,24 @@ class CourseDetailView(View):
         # 根据id查询课程详情
         course = Course.objects.get(pk=int(course_id))
         # 当前course点击次数+1
-        course.click_nums +=1
+        course.click_nums += 1
         course.save()
+
+        # 获取收藏状态
+        has_fav_course = False
+        has_fav_org = False
+
+        if request.user.is_authenticated:
+            # 查询用户是否收藏了该课程和机构
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=1):
+                has_fav_course = True
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.course_org.id, fav_type=2):
+                has_fav_org = True
 
         return render(request, 'course-detail.html', context={
             'course': course,
+            'has_fav_course': has_fav_course,
+            'has_fav_org': has_fav_org,
         })
 
 
