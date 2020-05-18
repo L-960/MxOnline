@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block custom_bread %}
     <!--crumbs start-->
@@ -61,7 +62,9 @@
                                         收藏
                                     {% endif %}
                                 </div>
-                                <a style="color: white" href="{% url 'courses:lesson' course.id %}"><div class="buy btn">开始学习</div></a>
+                                <a style="color: white" href="{% url 'courses:lesson' course.id %}">
+                                    <div class="buy btn">开始学习</div>
+                                </a>
                             </div>
                         </div>
                         <div class="group-share-box">
@@ -84,11 +87,11 @@
                     <div class="right">
                         <div class="head">
                             <h1>授课机构</h1>
-                            <p>世界名校，课程权威</p>
+                            <p>{{ course.course_org.tag }}</p>
                         </div>
                         <div class="pic">
                             <a href="/company/14/">
-                                <img width="150" height="80" src="../media/org/2016/11/bjdx.jpg"/>
+                                <img width="150" height="80" src="{{ course.image.url }}"/>
                             </a>
                         </div>
                         <a href="/company/14/">
@@ -105,16 +108,18 @@
                         <div class="clear">
                             <ul>
                                 <li>
-                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ course.course_org.course_set.count }}</span>
+                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ course.course_org.course_set.count }}</span>
                                 </li>
                                 <li>
-                                    <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{ course.course_org.teacher_set.count }}</span>
+                                    <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ course.course_org.teacher_set.count }}</span>
                                 </li>
-                                <li>所在地区：&nbsp;&nbsp;{{ course.course_org.city }}</li>
-                                <li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:{{ course.course_org.is_auth }}
-                                    &nbsp;&nbsp;
-                                    <img title="金牌机构" , src="../images/gold.png"/>
-                                </li>
+                                <li>所在地区：&nbsp;&nbsp;{{ course.course_org.address }}</li>
+                                {% if course.course_org.is_gold %}
+                                    <li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:
+                                        &nbsp;&nbsp;
+                                        <img title="金牌机构" , src="{% static 'images/gold.png' %}"/>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -239,18 +244,20 @@
                     <div class="head">相关课程推荐</div>
                     <div class="group_recommend">
 
-                        <dl>
-                            <dt>
-                                <a target="_blank" href="">
-                                    <img width="240" height="220" class="scrollLoading"
-                                         src="../media/courses/2016/11/540e57300001d6d906000338-240-135_mvvGYHL.jpg"/>
-                                </a>
-                            </dt>
-                            <dd>
-                                <a target="_blank" href=""><h2> django实战项目</h2></a>
-                                <span class="fl">学习时长：<i class="key">0</i></span>
-                            </dd>
-                        </dl>
+                        {% for course in related_courses %}
+                            <dl>
+                                <dt>
+                                    <a target="_blank" href="">
+                                        <img width="240" height="220" class="scrollLoading"
+                                             src="{{ course.image.url }}"/>
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <a target="_blank" href=""><h2> {{ course.name }}</h2></a>
+                                    <span class="fl">学习时长：<i class="key">{{ course.learn_times }}</i></span>
+                                </dd>
+                            </dl>
+                        {% endfor %}
 
 
                     </div>

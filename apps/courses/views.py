@@ -69,10 +69,19 @@ class CourseDetailView(View):
             if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=2):
                 has_fav_org = True
 
+        # 课程推荐
+        # 当前课程的单标签
+        tag = course.tag
+        # 关联的课程
+        related_courses = []
+        if tag:
+            related_courses = Course.objects.filter(tag=tag).exclude(id__in=[course.id])[:3]
+
         return render(request, 'course-detail.html', context={
             'course': course,
             'has_fav_course': has_fav_course,
             'has_fav_org': has_fav_org,
+            'related_courses': related_courses,
         })
 
 
@@ -126,7 +135,6 @@ def coursetest(request):
     #         video.url = '测试url'
     #         video.save()
 
-
     # 资源测试
     # courses = Course.objects.all()
     # for course in courses:
@@ -152,10 +160,26 @@ class CourseLessonView(LoginRequiredMixin, View):
         course.click_nums += 1
         course.save()
 
+        # 该课的同学还学过
+        # 查询当前用户都学了那些课
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        print(user_ids)
+        # 查询这个用户关联的所有课程
+        # 学习了这个课程的用户还学习了哪些课
+        all_courses = UserCourse.objects.filter(user_id__in=user_ids).order_by("-course__click_nums")[:5]
+        # 过滤掉当前课程
+        related_courses = []
+        for item in all_courses:
+            if item.course.id != course.id:
+                if item.course not in related_courses:
+                    related_courses.append(item.course)
+
         # 查询资料信息
         course_resource = CourseResource.objects.filter(course=course)
 
         return render(request, 'course-video.html', {
             "course": course,
             "course_resource": course_resource,
+            "related_courses": related_courses,
         })
