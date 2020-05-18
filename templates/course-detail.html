@@ -61,7 +61,7 @@
                                         收藏
                                     {% endif %}
                                 </div>
-                                <div class="buy btn"><a style="color: white" href="course-video.html">开始学习</a></div>
+                                <a style="color: white" href="{% url 'courses:lesson' course.id %}"><div class="buy btn">开始学习</div></a>
                             </div>
                         </div>
                         <div class="group-share-box">
@@ -80,6 +80,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="right">
                         <div class="head">
                             <h1>授课机构</h1>
@@ -91,7 +92,7 @@
                             </a>
                         </div>
                         <a href="/company/14/">
-                            <h2 class="center" title="清华大学">北京大学</h2>
+                            <h2 class="center" title="清华大学">{{ course.course_org.name }}</h2>
                         </a>
                         <div class="btn  notlogin
 					     " data-favid="14" id="jsRightBtn">
@@ -104,19 +105,20 @@
                         <div class="clear">
                             <ul>
                                 <li>
-                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   5</span>
+                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ course.course_org.course_set.count }}</span>
                                 </li>
                                 <li>
-                                    <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  0</span>
+                                    <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{ course.course_org.teacher_set.count }}</span>
                                 </li>
-                                <li>所在地区：&nbsp;&nbsp;北京市</li>
-                                <li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:
+                                <li>所在地区：&nbsp;&nbsp;{{ course.course_org.city }}</li>
+                                <li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:{{ course.course_org.is_auth }}
                                     &nbsp;&nbsp;
                                     <img title="金牌机构" , src="../images/gold.png"/>
                                 </li>
                             </ul>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -256,4 +258,50 @@
             </div>
         </div>
     </section>
+{% endblock %}
+
+{% block custom_js %}
+    <script>
+
+        {#current_elem:#}
+
+        function add_fav(current_elem, fav_id, fav_type) {
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: "{% url 'op:fav' %}",
+                async: true,
+                {#async:true,是否异步#}
+                data: {'fav_id': fav_id, 'fav_type': fav_type},
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function (data) {
+                    if (data.status == 'fail') {
+                        if (data.msg == '用户未登陆') {
+                            window.location.href = '{% url 'login' %}'
+                        } else {
+                            alert(data.msg)
+                        }
+                    } else if (data.status == 'success') {
+                        current_elem.text(data.msg)
+                    }
+                }
+            })
+        }
+
+        {#课程收藏的实现#}
+        $(document).ready(function () {
+            $('#jsLeftBtn').on('click', function () {
+                add_fav($(this), {{ course.id }}, 1)
+            })
+        })
+        {#机构收藏的实现#}
+        $(document).ready(function () {
+            $('#jsRightBtn').on('click', function () {
+                add_fav($(this), {{ course.course_org.id }}, 2)
+            })
+        })
+
+    </script>
 {% endblock %}

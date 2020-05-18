@@ -2,6 +2,21 @@ import xadmin
 from apps.courses.models import *
 
 
+class GlobalSettings(object):
+    site_title = "慕学后台管理系统"
+    site_footer = "慕学在线网"
+    # menu_style = "accordion"
+
+
+class BaseSettings(object):
+    enable_themes = True
+    use_bootswatch = True
+
+
+xadmin.site.register(xadmin.views.CommAdminView, GlobalSettings)
+xadmin.site.register(xadmin.views.BaseAdminView, BaseSettings)
+
+
 # 不用继承admin.ModelAdmin，
 class CourseAdmin(object):
     # 显示字段

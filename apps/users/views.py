@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.views.generic.base import View
 from django.http import HttpResponse, HttpResponseRedirect
 from apps.users.form import LoginForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 
 from apps.users.models import UserProfile
@@ -11,7 +11,13 @@ from apps.users.models import UserProfile
 # Create your views here.
 class LoginView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'login.html')
+        if request.user.is_authenticated:
+            return reverse('index')
+        next = request.GET.get("next", '')
+
+        return render(request, 'login.html', context={
+            'next': next,
+        })
 
     def post(self, request, *args, **kwargs):
         """
@@ -32,8 +38,12 @@ class LoginView(View):
             user = authenticate(username=user_name, password=password)
             # 判断user对象是否存在
             if user is not None:
-                # 不为空， z证明查询到了用户
+                # 不为空， 证明查询到了用户
                 login(request, user)
+                # 取一下next值
+                next = request.GET.get("next", "")
+                if next:
+                    return HttpResponseRedirect(next)
                 # 重定向到网站首页
                 return HttpResponseRedirect(reverse("index"))
             else:
@@ -41,3 +51,10 @@ class LoginView(View):
                 return render(request, 'login.html', {"msg": "用户名密码错误", "login_form": login_form})
         else:
             return render(request, "login.html", {"login_form": login_form})
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        # 重定向到网站首页
+        return HttpResponseRedirect(reverse("index"))

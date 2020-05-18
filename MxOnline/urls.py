@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 from apps.courses import views
 from apps.courses.views import *
 from apps.organizations.views import OrgView
-from apps.users.views import LoginView
+from apps.users.views import LoginView, LogoutView
 from django.conf.urls import url
 from django.views.static import serve
 from MxOnline.settings import MEDIA_ROOT
@@ -34,6 +34,7 @@ urlpatterns = [
     # path('', views.index),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 
     # 配置公开课的子url
     url(r'^courses/', include(('apps.courses.urls', 'courses'), namespace='courses')),
@@ -41,4 +42,9 @@ urlpatterns = [
 
     # 配置授课机构子路由
     url(r'^org/', include(('apps.organizations.urls', 'organizations'), namespace='org')),
+
+    # 用户操作
+    url(r'^op/', include(('apps.operations.urls', 'operations'), namespace='op')),
+
+
 ]

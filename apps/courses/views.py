@@ -1,5 +1,6 @@
 import random
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import PageNotAnInteger
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -65,7 +66,7 @@ class CourseDetailView(View):
             # 查询用户是否收藏了该课程和机构
             if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=1):
                 has_fav_course = True
-            if UserFavorite.objects.filter(user=request.user, fav_id=course.course_org.id, fav_type=2):
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=2):
                 has_fav_org = True
 
         return render(request, 'course-detail.html', context={
@@ -103,4 +104,58 @@ def coursetest(request):
     #         lesson.name = course.name + f'_章节{i+1}'
     #         lesson.learn_times = random.randint(0, 500)
     #         lesson.save()
+
+    # 增加课程章节
+    # courses = Course.objects.all()
+    # for course in courses:
+    #     for i in range(8):
+    #         lesson = Lesson()
+    #         lesson.course = course
+    #         lesson.name = f'课程章节测试{i+1}'
+    #         lesson.save()
+
+    # 章节视频测试
+
+    # lessons = Lesson.objects.all()
+    # for lesson in lessons:
+    #     for i in range(3):
+    #         video = Video()
+    #         video.lesson = lesson
+    #         video.name = f'视频资源{i+1}'
+    #         video.learn_times = 10 * (i + 1) + 21
+    #         video.url = '测试url'
+    #         video.save()
+
+
+    # 资源测试
+    # courses = Course.objects.all()
+    # for course in courses:
+    #     resource = CourseResource()
+    #     for i in range(3):
+    #         resource.course = course
+    #         resource.name = f'资源下载测试{i+1}'
+    #         resource.file = 'courses/resourse/2020/05/GitHubDesktop.exe'
+    #         resource.save()
+
     return HttpResponse('create ok')
+
+
+class CourseLessonView(LoginRequiredMixin, View):
+    """
+        章节信息
+    """
+    login_url = '/login/'
+
+    def get(self, request, course_id, *args, **kwargs):
+        course = Course.objects.get(id=int(course_id))
+        # 点击到课程 的详情就记录一次点击数
+        course.click_nums += 1
+        course.save()
+
+        # 查询资料信息
+        course_resource = CourseResource.objects.filter(course=course)
+
+        return render(request, 'course-video.html', {
+            "course": course,
+            "course_resource": course_resource,
+        })
