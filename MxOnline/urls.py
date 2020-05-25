@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 
 from apps.courses import views
 from apps.courses.views import *
+from apps.operations.views import IndexView
 from apps.organizations.views import OrgView
 from apps.users.views import LoginView, LogoutView
 from django.conf.urls import url
@@ -32,7 +33,7 @@ urlpatterns = [
     # 配置上传文件的访问url
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     # path('', views.index),
-    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    path('', IndexView.as_view(), name='index'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
 
@@ -45,6 +46,9 @@ urlpatterns = [
 
     # 用户操作
     url(r'^op/', include(('apps.operations.urls', 'operations'), namespace='op')),
+
+
+    url(r'^users/', include(('apps.users.urls', 'users'), namespace='users')),
 
 
 ]

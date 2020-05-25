@@ -33,14 +33,14 @@
                     {% if user.is_authenticated %}
                         <div class="personal">
                             <dl class="user fr">
-                                <dd>EricLee<img class="down fr" src="/static/images/top_down.png"/></dd>
-                                <dt><img width="20" height="20" src="/static/media/image/2016/12/default_big_14.png"/>
+                                <dd>{{ user.nick_name }}<img class="down fr" src="/static/images/top_down.png"/></dd>
+                                <dt><img width="20" height="20" src="{{ user.image.url }}"/>
                                 </dt>
                             </dl>
                             <div class="userdetail">
                                 <dl>
                                     <dt><img width="80" height="80"
-                                             src="/static/media/image/2016/12/default_big_14.png"/>
+                                             src="{{ user.image.url }}"/>
                                     </dt>
                                     <dd>
                                         <h2>django</h2>
@@ -48,7 +48,7 @@
                                     </dd>
                                 </dl>
                                 <div class="btn">
-                                    <a class="personcenter fl" href="usercenter-info.html">进入个人中心</a>
+                                    <a class="personcenter fl" href="{% url 'users:info' %}">进入个人中心</a>
                                     <a class="fr" href="{% url 'logout' %}">退出</a>
                                 </div>
                             </div>
@@ -97,10 +97,10 @@
                                     公开课<img class="hot" src="/static/images/nav_hot.png">
                                 </a>
                             </li>
-                            <li>
-                                <a href="#">授课教师</a>
+                            <li class="{% if request.path|slice:'13' == '/org/teachers' %}active{% endif %}">
+                                <a href="{% url 'org:teachers' %}">授课教师</a>
                             </li>
-                            <li class="{% if request.path|slice:'4' == '/org' %}active{% endif %}"><a
+                            <li class="{% if request.path|slice:'9' == '/org/list' %}active{% endif %}"><a
                                     href="{% url 'org:list' %}">授课机构</a></li>
                         </ul>
                     </div>

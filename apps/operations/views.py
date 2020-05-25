@@ -4,7 +4,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views import View
 from apps.operations.forms import UserFavForm, CourseComments, CommentForm
-from apps.operations.models import UserFavorite
+from apps.operations.models import UserFavorite, Banner
 from apps.courses.models import Course
 from apps.organizations.models import CourseOrg
 from apps.organizations.models import Teacher
@@ -103,3 +103,24 @@ class CommentView(View):
                 'status': 'fail',
                 'msg': '表单不合法',
             })
+
+
+class IndexView(View):
+    def get(self, request):
+        '''
+        首页请求
+        '''
+        # 轮播图banner加载
+        banners = Banner.objects.all().order_by("index")[:4]
+        # 公开课加载(除去banner课程)
+        courses = Course.objects.filter(is_banner=False)[:6]
+        # 公开课小banner加载
+        banner_courses = Course.objects.filter(is_banner=True)[:3]
+        # 机构加载
+        course_orgs = CourseOrg.objects.all()[:15]
+        return render(request, 'index.html', context={
+            'banners': banners,
+            'courses': courses,
+            'course_orgs': course_orgs,
+            'banner_courses': banner_courses,
+        })

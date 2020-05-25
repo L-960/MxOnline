@@ -92,3 +92,32 @@ class AddAsk(View):
                 'status': 'error',
                 'msg': '提交错误',
             })
+
+
+class TeacherListView(View):
+    def get(self, request):
+        all_teacher = Teacher.objects.all()
+        teacher_nums = all_teacher.count()
+        hot_teachers = Teacher.objects.all().order_by("-click_nums")[:3]
+
+        # 讲师分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teacher, per_page=5, request=request)  # 每页显示5个
+        teachers = p.page(page)
+
+        return render(request, 'teachers-list.html', context={
+            'teachers': teachers,
+            'teacher_nums': teacher_nums,
+        })
+
+
+class TeacherDetail(View):
+    def get(self, request, teacher_id):
+        teacher = Teacher.objects.get(id=teacher_id)
+        return render(request, 'teacher-detail.html', context={
+            'teacher': teacher,
+        })
