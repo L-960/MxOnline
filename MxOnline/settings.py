@@ -85,8 +85,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mxonline',  # 数据库名字
         'USER': 'root',
-        'PASSWORD': 'lxy9368...$PWD',
-        'HOST': '121.199.68.194',
+        'PASSWORD': '***',
+        'HOST': '***',
         'PORT': 3306,
     }
 }
